@@ -1,8 +1,7 @@
 class ArticlesController < ApplicationController
-  # GET /articles
-  # GET /articles.json
+
   def index
-    @articles = Article.all
+    @articles = Article.sorted_by(params[:order_by])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -10,8 +9,7 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # GET /articles/1
-  # GET /articles/1.json
+
   def show
     @article  = Article.includes(:comments).find(params[:id])
 
@@ -21,8 +19,6 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # GET /articles/new
-  # GET /articles/new.json
   def new
     @article = Article.new
 
@@ -32,15 +28,18 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # GET /articles/1/edit
   def edit
     @article = Article.find(params[:id])
   end
 
-  # POST /articles
-  # POST /articles.json
   def create
-    @article = Article.new(params[:article])
+    # @article = Article.new(params[:article])
+    @article = Article.new(:title => params[:article][:title],
+                           :body => params[:article][:title])
+        
+    
+    puts params
+    puts "************************************"
 
     respond_to do |format|
       if @article.save
@@ -53,8 +52,7 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # PUT /articles/1
-  # PUT /articles/1.json
+
   def update
     @article = Article.find(params[:id])
 
@@ -69,8 +67,6 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # DELETE /articles/1
-  # DELETE /articles/1.json
   def destroy
     @article = Article.find(params[:id])
     @article.destroy

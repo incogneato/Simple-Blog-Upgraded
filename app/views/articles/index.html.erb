@@ -1,3 +1,6 @@
+<h4>Sort By:</h4>
+<%= link_to 'Title', articles_path(:order_by => 'title') %> | <%= link_to('Word Count', articles_path(:order_by => 'word_count')) %> | <%= link_to('Published', articles_path(:order_by => 'published')) %>
+
 <% @articles.each do |article| %>
   <div class="article">
     <h3><%= article.title %></h3>
@@ -7,6 +10,10 @@
       <%= link_to 'Show', article %> | 
       <%= link_to 'Edit', edit_article_path(article) %> | 
       <%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %>
+      
+      
+      
+      
     </p>
   </div>
 <% end %>

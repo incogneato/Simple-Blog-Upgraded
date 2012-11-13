@@ -4,6 +4,8 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id]) if params[:id]
   end
 
+  before_filter :title_upcase, :only => :index
+
   def index
     if !params[:order_by].nil?
       @articles = Article.sorted_by(params[:order_by])
@@ -16,7 +18,7 @@ class ArticlesController < ApplicationController
 
 
   def show
-    # @article = Article.includes(:comments)#.find(params[:id])
+    @article = Article.includes(:comments).find(params[:id])
   end
 
   def new
@@ -63,4 +65,12 @@ class ArticlesController < ApplicationController
     # @article = Article.find(params[:id])
     @article.destroy
   end
+
+  private
+  def title_upcase
+    @articles = Article.all.each do |article| 
+        article.title.upcase!
+    end
+  end
+
 end

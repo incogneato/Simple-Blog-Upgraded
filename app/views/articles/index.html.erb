@@ -2,16 +2,13 @@
 <%= link_to( 'Title', articles_path(:order_by => 'title')) %> | 
 <%= link_to('Word Count', articles_path(:order_by => 'word_count')) %> | 
 <%= link_to('Published', articles_path(:order_by => 'published')) %> | 
-<%= link_to('3 Random Articles', articles_path(:limit => 3)) %>
-
-
+<%= link_to('3 Randoms', articles_path(:limit => 3)) %>
 
 <%= form_tag articles_path, :method => :get do %>
   <%= label_tag :number_to_show %>
   <%= select_tag :limit, options_for_select((1..10).to_a) %>
-  <%= submit_tag "Get my articles" %>
+  <%= submit_tag "Get articles" %>
 <% end %>
-
 
 <hr />
 

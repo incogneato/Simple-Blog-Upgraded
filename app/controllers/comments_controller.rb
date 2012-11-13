@@ -1,8 +1,5 @@
 class CommentsController < ApplicationController
 
-  # Implement a before_filter for just the create action on CommentsController 
-  # that replaces the word "sad" with "happy" in the incoming comment body.
-
   before_filter :sad_to_happy, :only => :create
   # POST /comments
   # POST /comments.json
@@ -35,8 +32,6 @@ class CommentsController < ApplicationController
 
   private
   def sad_to_happy
-    logger.info { params[:comment] }
-    params[:comment][:body].gsub!("sad", "happy")  
-    logger.info { params[:comment] }
+    params[:comment][:body].gsub!("sad", "happy")
   end
 end

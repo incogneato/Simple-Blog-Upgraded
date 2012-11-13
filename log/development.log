@@ -13403,3 +13403,12 @@ Processing by ArticlesController#index as HTML
   Rendered articles/index.html.erb within layouts/application (7.4ms)
   Rendered layouts/_header.html.erb (0.3ms)
 Completed 200 OK in 21ms (Views: 18.5ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/articles" for 127.0.0.1 at 2012-11-13 12:42:25 -0800
+Processing by ArticlesController#index as HTML
+  [1m[36mArticle Load (0.1ms)[0m  [1mSELECT "articles".* FROM "articles" [0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "articles".* FROM "articles" 
+  Rendered articles/index.html.erb within layouts/application (7.8ms)
+  Rendered layouts/_header.html.erb (0.3ms)
+Completed 200 OK in 67ms (Views: 19.4ms | ActiveRecord: 0.7ms)

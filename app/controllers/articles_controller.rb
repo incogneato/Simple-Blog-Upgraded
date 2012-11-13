@@ -72,5 +72,4 @@ class ArticlesController < ApplicationController
         article.title.upcase!
     end
   end
-
 end

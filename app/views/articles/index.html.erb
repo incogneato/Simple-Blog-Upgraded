@@ -1,5 +1,21 @@
 <h4>Sort By:</h4>
-<%= link_to 'Title', articles_path(:order_by => 'title') %> | <%= link_to('Word Count', articles_path(:order_by => 'word_count')) %> | <%= link_to('Published', articles_path(:order_by => 'published')) %>
+<%= link_to( 'Title', articles_path(:order_by => 'title')) %> | 
+<%= link_to('Word Count', articles_path(:order_by => 'word_count')) %> | 
+<%= link_to('Published', articles_path(:order_by => 'published')) %> | 
+<%= link_to('3 Random Articles', articles_path(:limit => 3)) %>
+
+
+
+<%= form_tag articles_path, :method => :get do %>
+  <%= label_tag :number_to_show %>
+  <%= select_tag :limit, options_for_select((1..10).to_a) %>
+  <%= submit_tag "Get my articles" %>
+<% end %>
+
+
+<hr />
+
+<%# link_to 'Limit to (3) articles', request.parameters.merge({:limit => 3}) %>
 
 <% @articles.each do |article| %>
   <div class="article">
@@ -10,9 +26,6 @@
       <%= link_to 'Show', article %> | 
       <%= link_to 'Edit', edit_article_path(article) %> | 
       <%= link_to 'Destroy', article, method: :delete, data: { confirm: 'Are you sure?' } %>
-      
-      
-      
       
     </p>
   </div>

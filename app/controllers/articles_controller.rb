@@ -1,31 +1,22 @@
 class ArticlesController < ApplicationController
 
   def index
-    @articles = Article.sorted_by(params[:order_by])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @articles }
+    if !params[:order_by].nil?
+      @articles = Article.sorted_by(params[:order_by])
+    elsif !params[:limit].nil?
+      @articles = Article.only(params[:limit])
+    else
+      @articles = Article.all
     end
   end
 
 
   def show
     @article  = Article.includes(:comments).find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @article }
-    end
   end
 
   def new
     @article = Article.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @article }
-    end
   end
 
   def edit
@@ -36,10 +27,7 @@ class ArticlesController < ApplicationController
     # @article = Article.new(params[:article])
     @article = Article.new(:title => params[:article][:title],
                            :body => params[:article][:title])
-        
-    
-    puts params
-    puts "************************************"
+      
 
     respond_to do |format|
       if @article.save
@@ -70,10 +58,5 @@ class ArticlesController < ApplicationController
   def destroy
     @article = Article.find(params[:id])
     @article.destroy
-
-    respond_to do |format|
-      format.html { redirect_to articles_url }
-      format.json { head :no_content }
-    end
   end
 end

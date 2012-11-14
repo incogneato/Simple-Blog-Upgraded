@@ -92,6 +92,7 @@ around_filter :exception_wrap
       yield
     rescue => exception
       render :text => "So sorry! #{params[:action]} action is broked!"
+      redirect_to articles_path
     end
   end
 end

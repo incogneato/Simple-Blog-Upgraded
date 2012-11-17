@@ -1,8 +1,5 @@
 class CommentsController < ApplicationController
-
   before_filter :sad_to_happy, :only => :create
-  # POST /comments
-  # POST /comments.json
   def create
     @article = Article.find(params[:article_id])
     @comment = @article.comments.build(params[:comment])
@@ -35,3 +32,12 @@ class CommentsController < ApplicationController
     params[:comment][:body].gsub!("sad", "happy")
   end
 end
+
+
+# Comments get created in CommentsController, but what if they fail validation?
+
+# Add a validation to the Comment model.
+# Add a flash message about the comment failing validation
+# Display the validation error in the comment form
+# Test it out in the interface!
+

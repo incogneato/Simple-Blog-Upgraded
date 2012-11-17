@@ -1,10 +1,12 @@
+require 'text_validations'
 class Article < ActiveRecord::Base
+  include TextValidations
   has_many :comments, dependent: :destroy
+  before_save :capitalize_title
+
+  validates_presence_of :title, :body
 
   attr_accessible :body, :title
-  
-  before_save :capitalize_title
-  
   def self.sorted_by(param)
     case param
     when 'title'

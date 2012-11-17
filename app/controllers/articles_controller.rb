@@ -2,23 +2,7 @@ class ArticlesController < ApplicationController
 
 before_filter :load_article, :except => [:index, :new, :create]
 before_filter :title_upcase, :only => :index
-around_filter :exception_wrap
-
-# Implement an around_filter that catches an exception, 
-# writes an apology into the flash[:notice], 
-# and redirects to the articles index.
-
-# If the exception was raised in articles#index, 
-# render the message as plain text (render :text => "xyz"). 
-# Hint: check the value of params[:action]
-
-# After implementing this, try it out by causing an 
-# exception (maybe by adding a validation) and make sure it works.
-
-# Wherever yield is called, the action will be executed. 
-# So the functionality here could recover from any 
-# exception that occurs in the yielded action.
-
+around_filter :error_handler
   def index
     if !params[:order_by].nil?
       @articles = Article.sorted_by(params[:order_by])
@@ -41,35 +25,43 @@ around_filter :exception_wrap
     # @article = Article.find(params[:id])
   end
 
+  # -------------------
+  # Change the redirect_to to a render and recreate the 
+  # problem of refreshing the page after a successful save. 
+  # The browser should prompt you about resubmitting the form data.
+
   def create
     # @article = Article.new(params[:article])
-    @article = Article.new(:title => params[:article][:title],
-                           :body => params[:article][:body])
-  
+    @article = Article.new(:title => params[:article][:title], :body  =>  params[:article][:body])
+    
     respond_to do |format|
       if @article.save
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
-        format.json { render json: @article, status: :created, location: @article }
       else
         format.html { render action: "new" }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
       end
     end
   end
-
 
   def update
-    # @article = Article.find(params[:id])
+    @article = Article.find(params[:id])
     respond_to do |format|
       if @article.update_attributes(params[:article])
-        format.html { redirect_to @article, notice: 'Article was successfully updated.' }
-        format.json { head :no_content }
+        render @article, notice: 'Article was successfully updated.'
       else
-        format.html { render action: "edit" }
-        format.json { render json: @article.errors, status: :unprocessable_entity }
+        render action: "edit"
       end
     end
   end
+
+# def update
+#   @book = Book.find(params[:id])
+#   if @book.update_attributes(params[:book])
+#     redirect_to(@book)
+#   else
+#     render :action => :edit
+#   end
+# end
 
   def destroy
     # @article = Article.find(params[:id])
@@ -87,12 +79,16 @@ around_filter :exception_wrap
     end
   end
 
-  def exception_wrap
-    begin
+  def error_handler
+     begin
       yield
-    rescue => exception
-      render :text => "So sorry! #{params[:action]} action is broked!"
-      redirect_to articles_path
+    rescue Exception => error
+      flash[:notice] = "Sorry, #{error} #{params[:action]} is broked!"
+      unless params[:action] == 'index'
+        redirect_to :action => 'index'
+      else
+        render :action => 'index'
+      end
     end
   end
 end
